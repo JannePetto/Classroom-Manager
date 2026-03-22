@@ -101,3 +101,13 @@ cd slave
 - Generated folders and runtime state are ignored with the root `.gitignore`.
 - Set the admin username and password before the first public/demo deployment.
 - The packaged agent download route only works after building the executable in `slave/dist/`.
+
+## No Warranty
+
+This software is provided "as is", without any warranty of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, and non-infringement. Use it at your own risk.
+
+To the maximum extent permitted by applicable law, the authors and contributors are not liable for any claim, damages, or other liability arising from or related to the software or its use.
+
+## License
+
+This project is licensed under the GNU GPL v3.0. See the [LICENSE](LICENSE) file.
