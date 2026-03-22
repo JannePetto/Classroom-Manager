@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Account Manual</title>
+  <style>
+    :root {
+      --ink: #1f1a15;
+      --muted: #5f564a;
+      --line: #d8cfc3;
+      --panel: #fffdf8;
+      --accent: #9c3d2a;
+      --accent-soft: #f4e0d9;
+      --soft: #f6f0e7;
+      --green: #255d39;
+    }
+
+    @page {
+      size: A4;
+      margin: 18mm 16mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #faf6f0;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .hero,
+    .card,
+    .button-table,
+    .workflow,
+    .tip-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .hero {
+      padding: 28px 30px;
+      background:
+        radial-gradient(circle at top left, rgba(156, 61, 42, 0.13), transparent 36%),
+        linear-gradient(180deg, #fffdf8 0%, #fbf5eb 100%);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-size: 33px;
+    }
+
+    h2 {
+      margin-top: 28px;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 10px 0 0;
+    }
+
+    ul,
+    ol {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .hero-grid,
+    .two-col,
+    .three-col {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.35fr 1fr;
+      margin-top: 22px;
+    }
+
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .three-col {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 16px 18px;
+    }
+
+    .card strong {
+      color: var(--accent);
+    }
+
+    .button-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .button-table th,
+    .button-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .button-table th {
+      background: #f8f1e6;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .button-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .button-name {
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .pill {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .summary-item {
+      padding: 12px;
+      border-radius: 14px;
+      background: #f8f3eb;
+      border: 1px solid #e6dccf;
+    }
+
+    .summary-item strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .summary-item span {
+      display: block;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .tip-box {
+      margin-top: 16px;
+      padding: 16px 18px;
+      background: #f7fbf8;
+      border-color: #cfdfd5;
+    }
+
+    .tip-box strong {
+      color: var(--green);
+    }
+
+    .workflow {
+      margin-top: 14px;
+      padding: 16px 18px;
+    }
+
+    .workflow h3 {
+      color: var(--accent);
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      main {
+        max-width: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Classroom Dashboard Manual</p>
+      <h1>Normal Teacher Account Guide</h1>
+      <p>This manual is written for a regular teacher account, not the primary admin account. It explains what you can see, what each button does, and how to use the dashboard during a lesson.</p>
+      <span class="pill">Teacher accounts only see the devices that the admin assigned to them.</span>
+
+      <div class="hero-grid">
+        <div class="card">
+          <h3>What this account can do</h3>
+          <ul>
+            <li>View assigned student devices</li>
+            <li>Create and manage your own classroom groups</li>
+            <li>Set your own per-group and per-device allowed activity rules</li>
+            <li>Use shared policy presets created by the admin</li>
+            <li>Blackout screens, display pictures, send announcements, request screen shares, open websites, launch programs, deploy updates, and use power controls</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>What this account cannot do</h3>
+          <ul>
+            <li>Create teacher accounts</li>
+            <li>Change other teachers' passwords</li>
+            <li>Change device access assignments</li>
+            <li>Open the admin console</li>
+          </ul>
+          <p class="small">If you need more devices or need a new shared preset, ask the primary admin account.</p>
+        </div>
+      </div>
+    </section>
+
+    <h2>1. Sign in and first view</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Signing in</h3>
+        <ol>
+          <li>Open the dashboard page in the browser.</li>
+          <li>Enter your teacher username and password.</li>
+          <li>Select <strong>Sign in</strong>.</li>
+        </ol>
+        <p>If your account was set up correctly, the login overlay disappears and the dashboard loads your assigned devices.</p>
+      </div>
+
+      <div class="card">
+        <h3>Top bar items</h3>
+        <ul>
+          <li><strong>Status indicator:</strong> Shows whether your browser is currently connected to the dashboard server.</li>
+          <li><strong>Device count:</strong> Shows how many student devices are visible to your account.</li>
+          <li><strong>Account badge:</strong> Shows which teacher account is signed in.</li>
+          <li><strong>Sign out:</strong> Ends your teacher session on this browser.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>2. Dashboard overview</h2>
+    <div class="card">
+      <h3>Summary cards</h3>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <strong>Online now</strong>
+          <span>How many visible student devices are currently connected.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Screen shares live</strong>
+          <span>How many students are currently sharing their screen with approval.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Pending approvals</strong>
+          <span>How many screen-share requests are waiting for student approval.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Offline devices</strong>
+          <span>How many assigned devices are currently not connected.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Average battery</strong>
+          <span>Average reported battery charge for visible devices.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Blackout active</strong>
+          <span>How many visible devices are currently under screen blackout.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Off task now</strong>
+          <span>How many visible devices are outside the current allowed activity rules.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Student devices area</h3>
+        <p>Each visible student appears as a card grouped by your own classroom groups. A card shows the student name, hostname, group name, online state, and whether the device looks off task.</p>
+        <p>Selecting a card opens the full device control window for that student.</p>
+      </div>
+
+      <div class="card">
+        <h3>Audit trail</h3>
+        <p>The recent activity area records screen-share actions such as request sent, approved, declined, cancelled, and ended. Use it to confirm what happened during class.</p>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>Important:</strong> The dashboard only shows the groups, device assignments, and policies that belong to your own teacher account. Another teacher can manage the same classroom system without seeing or changing your group setup.
+    </div>
+
+    <h2>3. Top-level buttons and controls</h2>
+    <table class="button-table">
+      <thead>
+        <tr>
+          <th>Button or control</th>
+          <th>What it does</th>
+          <th>When to use it</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="button-name">Blackout all</td>
+          <td>Sends a full-screen blackout overlay to every online device your account can see.</td>
+          <td>Use it when you need all eyes off student screens immediately.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Restore all</td>
+          <td>Removes the blackout overlay from all visible online devices.</td>
+          <td>Use it when normal student work should resume.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Refresh all</td>
+          <td>Requests a new status update from all visible devices.</td>
+          <td>Use it when cards look stale or after students reconnect.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Manage groups</td>
+          <td>Opens the group management window for your own account.</td>
+          <td>Use it to build groups, policies, group blackouts, group pictures, group announcements, and preset-based rules.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Download classroom manager (.exe)</td>
+          <td>Downloads the Windows classroom manager executable.</td>
+          <td>When the student starts it, it asks whether it should install itself into the user's Documents\Intel folder.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Search students</td>
+          <td>Filters the visible device list by username, hostname, or group name.</td>
+          <td>Use it to jump to a specific student quickly.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Sign out</td>
+          <td>Logs your teacher account out of the current browser session.</td>
+          <td>Use it when leaving a shared teacher PC or switching accounts.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. Group manager</h2>
+    <div class="card">
+      <h3>What the group manager is for</h3>
+      <p>The group manager is where you organize students into your own teaching groups and define what activity is allowed for those groups. Everything saved here belongs only to your account.</p>
+    </div>
+
+    <table class="button-table">
+      <thead>
+        <tr>
+          <th>Control</th>
+          <th>What it does</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="button-name">Choose group</td>
+          <td>Selects which of your groups you are editing.</td>
+          <td>If no group is selected, policy fields stay blank.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Create new group</td>
+          <td>Lets you type a new group name.</td>
+          <td>This only creates the group in your own account.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Create group</td>
+          <td>Saves the new group name you typed.</td>
+          <td>After creation, you can assign students to it.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Delete group</td>
+          <td>Deletes the selected group from your account.</td>
+          <td>Students assigned to that group in your account become ungrouped.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Rename selected group</td>
+          <td>Lets you type a new name for the selected group.</td>
+          <td>The rename only affects your own account.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Rename group</td>
+          <td>Applies the new name to the selected group.</td>
+          <td>Your group assignments and group policy move to the new name.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Shared preset</td>
+          <td>Shows shared rule templates created by the admin.</td>
+          <td>Presets are shared; your actual saved group policy is still private to your account.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Load preset</td>
+          <td>Loads the selected shared preset into the editor fields.</td>
+          <td>This does not save anything yet. It only fills the form.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Apply preset to group</td>
+          <td>Loads the selected preset and immediately saves it as the selected group's policy.</td>
+          <td>Use this for quick setup when you already chose the correct group.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Allowed programs</td>
+          <td>One rule per line. The device is considered allowed when the foreground program matches one of these entries.</td>
+          <td>Examples: <code>chrome.exe</code>, <code>winword.exe</code>.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Allowed websites</td>
+          <td>One rule per line. Browser URL, domain, and visible tab title are checked against these entries.</td>
+          <td>Examples: <code>classroom.google.com</code>, <code>khan academy</code>.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Website action</td>
+          <td>Chooses how website rule violations are treated.</td>
+          <td><strong>Block websites</strong> actively enforces the rule. <strong>Warn only</strong> keeps monitoring without the blocking mode.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Save group policy</td>
+          <td>Saves the current rules to the selected group in your account.</td>
+          <td>Students in that group immediately inherit the policy unless they have their own device-specific override.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Clear group policy</td>
+          <td>Removes the saved policy for the selected group.</td>
+          <td>The group remains, but it no longer has its own rule set.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Blackout group</td>
+          <td>Blacks out the screens of all online students in the selected group.</td>
+          <td>Only affects the group chosen in the dropdown.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Restore group</td>
+          <td>Removes blackout from the selected group.</td>
+          <td>Use it to return that group to normal work.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Choose picture</td>
+          <td>Selects an image file from your computer for the selected group.</td>
+          <td>The picture is not shown until you press <strong>Show picture</strong>.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Show picture</td>
+          <td>Displays the selected image fullscreen on every online device in the chosen group.</td>
+          <td>The overlay behaves like the blackout screen and is meant to stay on top.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Clear picture</td>
+          <td>Removes the picture overlay from the selected group.</td>
+          <td>Use it after the students have viewed the content.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Announcement</td>
+          <td>Text area for a fullscreen message sent to every student in the selected group.</td>
+          <td>Good for reminders like "5 minutes left" or "Save now".</td>
+        </tr>
+        <tr>
+          <td class="button-name">Show announcement</td>
+          <td>Displays the typed announcement on every online device in the selected group.</td>
+          <td>Students see the message in a fullscreen overlay.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Clear announcement</td>
+          <td>Closes the announcement overlay for the selected group.</td>
+          <td>Use it when the message is no longer needed.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Close</td>
+          <td>Closes the group manager window.</td>
+          <td>Your saved settings stay in place.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>5. Student device card and device window</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>On the student card</h3>
+        <ul>
+          <li>Student username</li>
+          <li>Hostname</li>
+          <li>Your group assignment for that student</li>
+          <li>Online or offline state</li>
+          <li>Off-task alert, when current activity breaks your rules</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Inside the device window</h3>
+        <ul>
+          <li><strong>Details</strong> section with live status facts</li>
+          <li><strong>Recent programs</strong> history</li>
+          <li><strong>Recent websites</strong> history</li>
+          <li><strong>Grouping</strong> controls</li>
+          <li><strong>Individual rules</strong> override controls</li>
+          <li><strong>Teacher controls</strong> action buttons</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="button-table">
+      <thead>
+        <tr>
+          <th>Device control</th>
+          <th>What it does</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="button-name">Save group</td>
+          <td>Assigns the student to the selected group in your account.</td>
+          <td>This does not change another teacher's grouping.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Clear group</td>
+          <td>Removes the student from your current group assignment.</td>
+          <td>The student becomes ungrouped in your account only.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Allowed programs / Allowed websites</td>
+          <td>Creates a device-specific policy override for that single student.</td>
+          <td>Leave blank to rely on the group policy instead.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Save user policy</td>
+          <td>Saves the device-specific rules for this one student.</td>
+          <td>These override the group rules for this teacher account.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Use group policy</td>
+          <td>Clears the device-specific override.</td>
+          <td>After clearing, the student follows the selected group's policy again.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Request screen share</td>
+          <td>Sends a screen-share request to the student device.</td>
+          <td>The student must approve locally before live viewing starts.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Cancel request</td>
+          <td>Appears while a screen-share request is waiting. Cancels that pending request.</td>
+          <td>Use it if you no longer need the student's screen.</td>
+        </tr>
+        <tr>
+          <td class="button-name">End screen share</td>
+          <td>Appears during an active shared session. Ends the approved session.</td>
+          <td>The audit log records the session end.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Open live session</td>
+          <td>Opens the live session viewer when a screen share is already active or a frame is available.</td>
+          <td>Use it for the larger remote-view and remote-control tools.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Blackout screen / Restore screen</td>
+          <td>Toggles a blackout overlay for this one student.</td>
+          <td>Useful for individual redirection without affecting the whole class.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Refresh now</td>
+          <td>Requests a fresh heartbeat and status update from this one device.</td>
+          <td>Use it if the data looks old or incorrect.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Choose picture / Show picture / Clear picture</td>
+          <td>Lets you place a fullscreen image overlay on this one student device, then remove it again.</td>
+          <td>Good for instructions, reference images, or attention grabs.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Announcement / Show announcement / Clear announcement</td>
+          <td>Lets you place a fullscreen text announcement on this one device, then remove it again.</td>
+          <td>Use for individual reminders or directions.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Open website</td>
+          <td>Launches the specified website on the student device.</td>
+          <td>Enter a full URL such as <code>https://example.com</code>.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Launch program</td>
+          <td>Starts a program on the student device.</td>
+          <td>Example values: <code>notepad.exe</code> or a full executable path.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Choose update file / Deploy to this user</td>
+          <td>Sends a selected update package to the student device.</td>
+          <td>Use it when rolling out a new agent file to a single machine.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Lock PC</td>
+          <td>Locks the student's Windows session.</td>
+          <td>The machine stays on, but the user must unlock it locally.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Restart PC</td>
+          <td>Schedules a restart for the student PC.</td>
+          <td>The dashboard asks for confirmation first.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Shut down PC</td>
+          <td>Schedules a shutdown for the student PC.</td>
+          <td>The dashboard asks for confirmation first.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Close</td>
+          <td>Closes the student device window.</td>
+          <td>No saved settings are lost.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>6. Live session window</h2>
+    <div class="card">
+      <h3>What this window is for</h3>
+      <p>The live session window is used after the student approves screen sharing. It gives you a larger view of the student screen and optional remote-control tools.</p>
+    </div>
+
+    <table class="button-table">
+      <thead>
+        <tr>
+          <th>Session control</th>
+          <th>What it does</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="button-name">Close</td>
+          <td>Closes the live session popup.</td>
+          <td>This closes your view. It does not automatically end the screen-share session itself.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Resize the screen slider</td>
+          <td>Makes the live preview smaller or larger inside the popup.</td>
+          <td>Helpful on large monitors or when you need more detail.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Enable remote control</td>
+          <td>Turns on keyboard and mouse control for the current live session.</td>
+          <td>Use only when appropriate and with classroom awareness.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Disable remote control</td>
+          <td>Turns remote mouse and keyboard control off again.</td>
+          <td>Use it when you want to return to view-only mode.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Send text</td>
+          <td>Sends the text from the session text box directly to the student machine.</td>
+          <td>Useful for pasting login codes, URLs, or short commands.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Choose image</td>
+          <td>Selects and sends an image to display fullscreen on the student's device during the session.</td>
+          <td>The viewer automatically converts the image for delivery.</td>
+        </tr>
+        <tr>
+          <td class="button-name">Clear image</td>
+          <td>Removes the fullscreen image currently being shown on the student device.</td>
+          <td>Use it when the student should return to normal work.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip-box">
+      <strong>Remote control basics:</strong> after enabling remote control, click inside the live preview to send mouse actions and type directly into the preview to send keystrokes. The student still had to approve the original screen-share request first.
+    </div>
+
+    <h2>7. How the key features work</h2>
+    <div class="three-col">
+      <div class="card">
+        <h3>Groups and rules</h3>
+        <p>Your groups are personal to your account. You can place students in groups and then save allowed programs and allowed websites for each group.</p>
+      </div>
+      <div class="card">
+        <h3>Shared presets</h3>
+        <p>The admin can publish presets such as "Exam" or "Research". You can load them into the group editor or apply them directly to one of your groups.</p>
+      </div>
+      <div class="card">
+        <h3>Device overrides</h3>
+        <p>If one student needs different rules, save a user-specific policy in that device window. It overrides the group rules for your account.</p>
+      </div>
+    </div>
+
+    <div class="three-col" style="margin-top: 14px;">
+      <div class="card">
+        <h3>Off-task monitoring</h3>
+        <p>A device becomes off task when the current program or website does not match your active allowed list. The dashboard highlights those students for you.</p>
+      </div>
+      <div class="card">
+        <h3>Programs and website history</h3>
+        <p>Each device window shows recent programs and websites so you can see what the student was doing recently, not just the current foreground item.</p>
+      </div>
+      <div class="card">
+        <h3>Announcements and pictures</h3>
+        <p>Announcements show fullscreen text. Pictures show fullscreen images. Both can be used on one student or on a whole group.</p>
+      </div>
+    </div>
+
+    <h2>8. Recommended daily workflow</h2>
+    <div class="workflow">
+      <h3>Before students start</h3>
+      <ol>
+        <li>Sign in to your teacher account.</li>
+        <li>Check that your assigned devices are visible.</li>
+        <li>Open <strong>Manage groups</strong> and choose the correct group rules or preset for the lesson.</li>
+        <li>If needed, use the agent download button for missing student machines.</li>
+      </ol>
+    </div>
+
+    <div class="workflow">
+      <h3>During the lesson</h3>
+      <ol>
+        <li>Use the summary cards and device cards to watch online state, off-task alerts, and pending approvals.</li>
+        <li>Open a student card when you need individual actions.</li>
+        <li>Use group blackout, pictures, or announcements when you need to redirect a whole group quickly.</li>
+        <li>Use screen-share requests when you need to view a student's screen with consent.</li>
+      </ol>
+    </div>
+
+    <div class="workflow">
+      <h3>At the end of class</h3>
+      <ol>
+        <li>Clear any active announcements or pictures.</li>
+        <li>Restore any blackout overlays still in place.</li>
+        <li>End any active screen-share sessions.</li>
+        <li>Sign out of the dashboard if the teacher PC is shared.</li>
+      </ol>
+    </div>
+
+    <h2>9. Troubleshooting</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>No devices appear</h3>
+        <ul>
+          <li>Check that the student agent is installed and running.</li>
+          <li>Check that the student device is on the same network as the dashboard.</li>
+          <li>Use <strong>Refresh all</strong>.</li>
+          <li>If you still see nothing, the admin may not have assigned any devices to your account yet.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Screen share will not open</h3>
+        <ul>
+          <li>First send <strong>Request screen share</strong>.</li>
+          <li>Wait for the student to approve the request.</li>
+          <li>Once the session is active, use <strong>Open live session</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Rules are not behaving as expected</h3>
+        <ul>
+          <li>Check whether the student has a device-specific override.</li>
+          <li>Check spelling of program names and website keywords.</li>
+          <li>Remember that groups and policies are stored per teacher account.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Announcements or images remain on screen</h3>
+        <ul>
+          <li>Use the matching <strong>Clear announcement</strong> or <strong>Clear picture</strong> button.</li>
+          <li>If the device is offline, the change will apply after it reconnects and receives the new state.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>Final reminder:</strong> a normal teacher account can fully manage its assigned devices, but account creation, password administration, device assignment, and shared preset creation remain admin-only tasks.
+    </div>
+  </main>
+</body>
+</html>
