@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script>
+    (() => {
+      document.documentElement.dataset.theme = "light";
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div>
+      <p class="eyebrow">Teacher workspace</p>
+      <h1>Classroom Device Dashboard</h1>
+    </div>
+    <div class="header-right">
+      <div class="status-indicator" id="serverStatus">
+        <span class="pulse"></span>
+        <span class="status-text">Connecting</span>
+      </div>
+      <button class="btn" id="themeToggleButton" type="button">Dark mode</button>
+      <div class="machine-count" id="machineCount">0 devices</div>
+      <div class="machine-count" id="accountBadge">Signed out</div>
+      <a class="btn manual-link" id="manualLink" href="/teacher-manual" target="_blank" rel="noopener" hidden>Teacher manual</a>
+      <button class="btn" id="logoutButton" type="button" hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="summary-grid">
+      <article class="summary-card">
+        <span class="summary-label">Online now</span>
+        <strong class="summary-value" id="onlineCount">0</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Screen shares live</span>
+        <strong class="summary-value" id="activeSessions">0</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Pending approvals</span>
+        <strong class="summary-value" id="pendingRequests">0</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Offline devices</span>
+        <strong class="summary-value" id="staleCount">0</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Average battery</span>
+        <strong class="summary-value" id="averageBattery">N/A</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Blackout active</span>
+        <strong class="summary-value" id="blackoutCount">0</strong>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Off task now</span>
+        <strong class="summary-value" id="offTaskCount">0</strong>
+      </article>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <p class="eyebrow">Managed fleet</p>
+        <h2>Student devices</h2>
+      </div>
+      <p class="section-copy">Screen-share requests start from the dashboard, and while a session is active the student sees a red <strong>Teacher connected</strong> popup in the top-right corner.</p>
+    </section>
+
+    <section class="control-strip">
+      <div class="control-actions">
+        <button class="btn warning" id="blackoutAllOn">Blackout all</button>
+        <button class="btn" id="blackoutAllOff">Restore all</button>
+        <button class="btn" id="refreshAll">Refresh all</button>
+        <button class="btn" id="openGroupManager" type="button">Class restrictions</button>
+        <button class="btn" id="openClassAdminManager" type="button" hidden>Manage classes</button>
+      </div>
+      <div class="connect-card">
+        <p class="eyebrow">Student download</p>
+        <div class="download-stack">
+          <a class="btn primary download-link" id="downloadAgentLink" href="/downloads/classroom-agent.exe" download>Download classroom manager (.exe)</a>
+          <code id="downloadUrl">Preparing download link...</code>
+        </div>
+        <p class="connect-note" id="connectNote">Students can download the classroom manager and, when they start it, it will ask whether it should install itself into their Documents\Intel folder.</p>
+      </div>
+    </section>
+
+    <section class="overview-tools">
+      <div class="search-card">
+        <label class="field-label" for="deviceSearchInput">Search students</label>
+        <input class="form-input" id="deviceSearchInput" placeholder="Search by logged-in username" />
+      </div>
+    </section>
+
+    <section class="machine-sections" id="machineGrid">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-badge" id="emptyStateBadge">No devices yet</div>
+        <p id="emptyStateCopy">Download and install the classroom manager on each student device, then the devices will appear here after the first heartbeat.</p>
+      </div>
+    </section>
+
+    <section class="section-header">
+      <div>
+        <p class="eyebrow">Audit trail</p>
+        <h2>Recent screen-share activity</h2>
+      </div>
+      <p class="section-copy">Every request, approval, denial, cancellation, and session end is listed here so classroom support stays visible and accountable.</p>
+    </section>
+
+    <section class="audit-panel">
+      <div class="audit-empty" id="auditEmpty">No screen-share activity yet.</div>
+      <div class="audit-list" id="auditLogList"></div>
+    </section>
+
+    <section class="section-header hidden" id="adminSectionHeader">
+      <div>
+        <p class="eyebrow">Admin console</p>
+        <h2>Accounts, classes, and shared presets</h2>
+      </div>
+      <p class="section-copy">Admin accounts can create teacher or admin users, change passwords, assign whole classes to teacher accounts, manage shared classes, and maintain shared restriction presets. The primary admin account always stays an admin.</p>
+    </section>
+
+    <section class="admin-panel hidden" id="adminPanel">
+      <details class="admin-card admin-collapse">
+        <summary class="admin-summary">
+          <span class="eyebrow">Create account</span>
+          <strong>Add account</strong>
+        </summary>
+        <div class="admin-card-body">
+          <label class="field-label" for="adminNewUsernameInput">Username</label>
+          <input class="form-input" id="adminNewUsernameInput" placeholder="Teacher username" />
+          <label class="field-label" for="adminNewPasswordInput">Password</label>
+          <input class="form-input" id="adminNewPasswordInput" type="password" placeholder="Temporary password" />
+          <label class="toggle-row">
+            <input type="checkbox" id="adminNewIsAdminInput" />
+            <span>Create as admin account</span>
+          </label>
+          <div class="inline-actions">
+            <button class="btn primary" id="adminCreateAccountButton" type="button">Create account</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="admin-card admin-collapse">
+        <summary class="admin-summary">
+          <span class="eyebrow">Manage presets</span>
+          <strong>Shared class restriction presets</strong>
+        </summary>
+        <div class="admin-card-body">
+          <label class="field-label" for="adminPresetSelect">Existing presets</label>
+          <select class="form-input" id="adminPresetSelect">
+            <option value="">Select a preset</option>
+          </select>
+
+          <label class="field-label" for="adminPresetNameInput">Preset name</label>
+          <input class="form-input" id="adminPresetNameInput" placeholder="Exam mode" />
+
+          <label class="field-label" for="adminPresetProgramsInput">Allowed programs</label>
+          <textarea class="form-textarea" id="adminPresetProgramsInput" placeholder="One per line"></textarea>
+
+          <label class="field-label" for="adminPresetSitesInput">Allowed websites</label>
+          <textarea class="form-textarea" id="adminPresetSitesInput" placeholder="One per line"></textarea>
+
+          <label class="field-label" for="adminPresetWebsiteModeInput">Website action</label>
+          <select class="form-input" id="adminPresetWebsiteModeInput">
+            <option value="block">Block websites</option>
+            <option value="warn">Warn only</option>
+          </select>
+
+          <div class="inline-actions">
+            <button class="btn" id="adminLoadPresetButton" type="button">Load preset</button>
+            <button class="btn primary" id="adminSavePresetButton" type="button">Save preset</button>
+            <button class="btn warning" id="adminDeletePresetButton" type="button">Delete preset</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="admin-card admin-account-card admin-collapse">
+        <summary class="admin-summary">
+          <span class="eyebrow">Accounts</span>
+          <strong>Account access</strong>
+        </summary>
+        <div class="admin-card-body">
+          <p class="management-note">Admin accounts always have full access to every device and the full admin console. Teacher accounts are assigned whole classes instead of single devices, and changes save automatically.</p>
+          <div class="account-list" id="adminAccountList"></div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <div class="session-modal hidden" id="groupManagerModal" aria-hidden="true">
+    <div class="session-dialog management-dialog">
+      <div class="session-header">
+        <div>
+          <p class="eyebrow">Class restrictions</p>
+          <h2>Class restrictions and actions</h2>
+          <p class="session-meta">Choose one of your classes, apply a shared preset, set allowed programs and websites for that class, and send class-wide actions.</p>
+        </div>
+        <div class="session-actions">
+          <button class="btn" id="closeGroupManager" type="button">Close</button>
+        </div>
+      </div>
+
+      <div class="management-grid">
+        <article class="management-card">
+          <label class="field-label" for="groupTargetInput">Choose class</label>
+          <select class="form-input" id="groupTargetInput">
+            <option value="">Select a class</option>
+          </select>
+          <p class="management-note">Admins create and assign classes in the separate class management menu. Teachers only edit restrictions for the classes assigned to their account.</p>
+        </article>
+
+        <article class="management-card">
+          <label class="field-label" for="groupPresetInput">Shared preset</label>
+          <select class="form-input" id="groupPresetInput">
+            <option value="">Select a preset</option>
+          </select>
+
+          <p class="management-note">Choosing a preset fills the editor and applies it to the selected class right away. These restrictions are shared for the whole class, so every teacher with access sees the same policy.</p>
+
+          <label class="field-label" for="allowedProgramsInput">Allowed programs</label>
+          <textarea class="form-textarea" id="allowedProgramsInput" placeholder="One per line, for example:&#10;chrome.exe&#10;word.exe"></textarea>
+
+          <label class="field-label" for="allowedSitesInput">Allowed websites</label>
+          <textarea class="form-textarea" id="allowedSitesInput" placeholder="One per line, for example:&#10;classroom.google.com&#10;khan academy"></textarea>
+
+          <label class="field-label" for="groupWebsiteModeInput">Website action</label>
+          <select class="group-input" id="groupWebsiteModeInput">
+            <option value="block">Block websites</option>
+            <option value="warn">Warn only</option>
+          </select>
+
+          <div class="inline-actions">
+            <button class="btn" id="clearGroupPolicy" type="button">Clear class restrictions</button>
+          </div>
+          <p class="management-note">Changes in this editor save automatically and are shared with every teacher who can access this class.</p>
+
+          <div class="inline-actions">
+            <button class="btn warning" id="groupBlackoutOn" type="button">Blackout class</button>
+            <button class="btn" id="groupBlackoutOff" type="button">Restore class</button>
+          </div>
+
+          <label class="field-label">Display picture for this class</label>
+          <label class="btn file-btn" for="groupImageInput">Choose picture</label>
+          <input id="groupImageInput" type="file" accept="image/*" hidden />
+          <div class="file-status" id="groupImageStatus">No picture selected.</div>
+          <div class="inline-actions">
+            <button class="btn" id="groupDisplayImageButton" type="button">Show picture</button>
+            <button class="btn" id="groupClearImageButton" type="button">Clear picture</button>
+          </div>
+
+          <label class="field-label" for="groupAnnouncementInput">Announcement for this class</label>
+          <textarea class="form-textarea" id="groupAnnouncementInput" placeholder="Type a message for every student in this class"></textarea>
+          <div class="inline-actions">
+            <button class="btn" id="sendGroupAnnouncementButton" type="button">Show announcement</button>
+            <button class="btn" id="clearGroupAnnouncementButton" type="button">Clear announcement</button>
+          </div>
+
+          <p class="management-note">Website rules match the detected browser URL/domain first and fall back to the visible tab title when needed.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-modal hidden" id="classAdminManagerModal" aria-hidden="true">
+    <div class="session-dialog management-dialog">
+      <div class="session-header">
+        <div>
+          <p class="eyebrow">Class management</p>
+          <h2>Create classes and assign devices</h2>
+          <p class="session-meta">Admins can create, rename, and delete shared classes here, then search student devices by the logged-in username and assign each one to a class.</p>
+        </div>
+        <div class="session-actions">
+          <button class="btn" id="closeClassAdminManager" type="button">Close</button>
+        </div>
+      </div>
+
+      <div class="management-grid">
+        <article class="management-card">
+          <label class="field-label" for="adminClassTargetInput">Choose class</label>
+          <select class="form-input" id="adminClassTargetInput">
+            <option value="">Select a class</option>
+          </select>
+
+          <label class="field-label" for="adminNewClassNameInput">Create new class</label>
+          <input class="form-input" id="adminNewClassNameInput" placeholder="Enter a new class name" />
+
+          <div class="inline-actions">
+            <button class="btn primary" id="adminCreateClassButton" type="button">Create class</button>
+            <button class="btn warning" id="adminDeleteClassButton" type="button">Delete class</button>
+          </div>
+
+          <label class="field-label" for="adminRenameClassNameInput">Rename selected class</label>
+          <input class="form-input" id="adminRenameClassNameInput" placeholder="Enter the new class name" />
+
+          <div class="inline-actions">
+            <button class="btn" id="adminRenameClassButton" type="button">Rename class</button>
+          </div>
+
+          <p class="management-note">Deleting a class removes that class assignment from every device and removes it from teacher account access lists.</p>
+        </article>
+
+        <article class="management-card">
+          <label class="field-label" for="adminClassSearchInput">Search devices by logged-in user</label>
+          <input class="form-input" id="adminClassSearchInput" placeholder="Search by student username" />
+          <div class="account-list" id="adminClassDeviceList"></div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-modal hidden" id="deviceModal" aria-hidden="true">
+    <div class="session-dialog management-dialog">
+      <div class="session-header">
+        <div>
+          <p class="eyebrow">Student device</p>
+          <h2 id="deviceModalTitle">User</h2>
+          <p class="session-meta" id="deviceModalMeta">Waiting for device details.</p>
+        </div>
+        <div class="session-actions">
+          <button class="btn" id="closeDeviceModal" type="button">Close</button>
+        </div>
+      </div>
+
+      <div class="device-modal-layout">
+        <details class="management-card device-collapse">
+          <summary class="device-summary">
+            <div>
+              <span class="eyebrow">1. Device status</span>
+              <strong>Current device details</strong>
+            </div>
+            <span class="device-summary-copy">Live status, browser info, policy source, battery, and last seen.</span>
+          </summary>
+          <div class="device-card-body">
+            <div class="device-facts" id="deviceFactList"></div>
+          </div>
+        </details>
+
+        <details class="management-card device-collapse">
+          <summary class="device-summary">
+            <div>
+              <span class="eyebrow">2. Action</span>
+              <strong>Teacher controls</strong>
+            </div>
+            <span class="device-summary-copy">Start sessions, send announcements, open websites, deploy updates, and power actions.</span>
+          </summary>
+          <div class="device-card-body">
+            <div class="inline-actions">
+              <button class="btn primary" id="deviceScreenShareButton" type="button">Request screen share</button>
+              <button class="btn" id="deviceOpenSessionButton" type="button">Open live session</button>
+              <button class="btn warning" id="deviceBlackoutButton" type="button">Blackout screen</button>
+              <button class="btn" id="deviceRefreshButton" type="button">Refresh now</button>
+            </div>
+
+            <label class="field-label">Display picture</label>
+            <label class="btn file-btn" for="deviceImageInput">Choose picture</label>
+            <input id="deviceImageInput" type="file" accept="image/*" hidden />
+            <div class="file-status" id="deviceImageStatus">No picture selected.</div>
+            <div class="inline-actions">
+              <button class="btn" id="displayDeviceImageButton" type="button">Show picture</button>
+              <button class="btn" id="clearDeviceImageButton" type="button">Clear picture</button>
+            </div>
+
+            <label class="field-label" for="deviceAnnouncementInput">Announcement</label>
+            <textarea class="form-textarea" id="deviceAnnouncementInput" placeholder="Type a message for this student"></textarea>
+            <div class="inline-actions">
+              <button class="btn" id="sendDeviceAnnouncementButton" type="button">Show announcement</button>
+              <button class="btn" id="clearDeviceAnnouncementButton" type="button">Clear announcement</button>
+            </div>
+
+            <label class="field-label" for="launchWebsiteInput">Open website</label>
+            <input class="form-input" id="launchWebsiteInput" placeholder="https://example.com" />
+            <button class="btn" id="launchWebsiteButton" type="button">Open for this user</button>
+
+            <label class="field-label" for="launchProgramInput">Launch program</label>
+            <input class="form-input" id="launchProgramInput" placeholder="notepad.exe or C:\Path\Program.exe" />
+            <button class="btn" id="launchProgramButton" type="button">Launch for this user</button>
+
+            <label class="field-label">Deploy agent update</label>
+            <label class="btn file-btn" for="agentUpdateInput">Choose update file</label>
+            <input id="agentUpdateInput" type="file" accept=".exe,.py" hidden />
+            <div class="file-status" id="agentUpdateStatus">No update selected.</div>
+            <button class="btn warning" id="deployAgentUpdate" type="button">Deploy to this user</button>
+
+            <label class="field-label">Power</label>
+            <div class="inline-actions">
+              <button class="btn" id="deviceLockButton" type="button">Lock PC</button>
+              <button class="btn warning" id="deviceRestartButton" type="button">Restart PC</button>
+              <button class="btn warning" id="deviceShutdownButton" type="button">Shut down PC</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="management-card device-collapse">
+          <summary class="device-summary">
+            <div>
+              <span class="eyebrow">3. Restrictions</span>
+              <strong>Individual override</strong>
+            </div>
+            <span class="device-summary-copy">Switch between class policy and individual rules for this device.</span>
+          </summary>
+          <div class="device-card-body">
+            <p class="management-note" id="devicePolicyModeLabel">This device is currently using the class restrictions.</p>
+            <div class="inline-actions">
+              <button class="btn" id="devicePolicyModeButton" type="button">Use individual policy</button>
+            </div>
+            <label class="field-label" for="deviceAllowedProgramsInput">Allowed programs</label>
+            <textarea class="form-textarea" id="deviceAllowedProgramsInput" placeholder="One per line"></textarea>
+            <label class="field-label" for="deviceAllowedSitesInput">Allowed websites</label>
+            <textarea class="form-textarea" id="deviceAllowedSitesInput" placeholder="One per line"></textarea>
+            <label class="field-label" for="deviceWebsiteModeInput">Website action</label>
+            <select class="group-input" id="deviceWebsiteModeInput">
+              <option value="block">Block websites</option>
+              <option value="warn">Warn only</option>
+            </select>
+            <p class="management-note">When individual mode is active, changes save automatically.</p>
+          </div>
+        </details>
+
+        <details class="management-card device-collapse">
+          <summary class="device-summary">
+            <div>
+              <span class="eyebrow">4. Recent websites</span>
+              <strong>Website history</strong>
+            </div>
+            <span class="device-summary-copy">Forbidden sites are highlighted in red.</span>
+          </summary>
+          <div class="device-card-body">
+            <div class="history-list" id="websiteHistoryList"></div>
+          </div>
+        </details>
+
+        <details class="management-card device-collapse">
+          <summary class="device-summary">
+            <div>
+              <span class="eyebrow">5. Recent programs</span>
+              <strong>Program history</strong>
+            </div>
+            <span class="device-summary-copy">The most recent foreground applications on this computer.</span>
+          </summary>
+          <div class="device-card-body">
+            <div class="history-list" id="programHistoryList"></div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <div class="session-modal hidden" id="sessionModal" aria-hidden="true">
+    <div class="session-dialog">
+      <div class="session-header">
+        <div>
+          <p class="eyebrow">Live session</p>
+          <h2 id="sessionTitle">Screen-share session</h2>
+          <p class="session-meta" id="sessionMeta">Waiting for a live session.</p>
+        </div>
+        <div class="session-actions">
+          <button class="btn" id="closeSessionModal" type="button">Close</button>
+        </div>
+      </div>
+
+      <div class="session-layout">
+        <div class="session-preview" id="sessionPreview" tabindex="0">
+          <img class="session-image" id="sessionImage" alt="Live student screen" hidden />
+          <div class="session-empty" id="sessionEmpty">Waiting for a live session preview.</div>
+        </div>
+
+        <aside class="session-sidebar">
+          <div class="session-card">
+            <p class="eyebrow">Preview size</p>
+            <h3>Resize the screen</h3>
+            <p class="session-copy">Use the slider to make the shared screen smaller or larger inside the popup.</p>
+            <input class="session-range" id="sessionScale" type="range" min="70" max="150" value="100" />
+          </div>
+
+          <div class="session-card">
+            <p class="eyebrow">Remote control</p>
+            <h3>Keyboard and mouse</h3>
+            <p class="session-copy" id="remoteControlHint">Enable remote control, then click inside the preview to move the mouse or type.</p>
+            <button class="btn primary" id="remoteControlToggle" type="button">Enable remote control</button>
+          </div>
+
+          <div class="session-card">
+            <p class="eyebrow">Type text</p>
+            <h3>Send text input</h3>
+            <textarea class="session-textarea" id="sessionTextInput" placeholder="Type text to send to the student computer"></textarea>
+            <button class="btn" id="sendSessionText" type="button">Send text</button>
+          </div>
+
+          <div class="session-card">
+            <p class="eyebrow">Display image</p>
+            <h3>Show file on student screen</h3>
+            <p class="session-copy">Choose an image file to show fullscreen on the student device.</p>
+            <label class="btn file-btn" for="sessionImageInput">Choose image</label>
+            <input id="sessionImageInput" type="file" accept="image/*" hidden />
+            <button class="btn" id="clearSessionImage" type="button">Clear image</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+      <p class="eyebrow">Teacher sign in</p>
+      <h2>Classroom account login</h2>
+      <p class="auth-copy">Sign in to open the dashboard. Admin accounts unlock the admin console for account access, shared classes, and shared class restriction presets.</p>
+
+      <label class="field-label" for="loginUsernameInput">Username</label>
+      <input class="form-input" id="loginUsernameInput" autocomplete="username" placeholder="Username" />
+
+      <label class="field-label" for="loginPasswordInput">Password</label>
+      <input class="form-input" id="loginPasswordInput" type="password" autocomplete="current-password" placeholder="Password" />
+
+      <p class="auth-error hidden" id="loginError"></p>
+
+      <div class="inline-actions">
+        <button class="btn primary" id="loginButton" type="button">Sign in</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
