@@ -1,0 +1,16 @@
+master/node_modules/
+master/data/classroom-state.json
+slave/Lib/
+slave/Scripts/
+slave/__pycache__/
+slave/build/
+slave/dist/
+slave/pyvenv.cfg
+docs/chrome-profile/
+*.pyc
+*.pyo
+*.pyd
+*.dmp
+.DS_Store
+Thumbs.db
+.vscode/
