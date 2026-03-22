@@ -44,8 +44,8 @@ Classroom Device Dashboard is a teacher-facing web dashboard plus a Windows clas
 ### Clone the project
 
 ```powershell
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/JannePetto/Classroom-Manager
+cd Classroom-Manager
 ```
 
 ### Start the dashboard
