@@ -110,4 +110,4 @@ To the maximum extent permitted by applicable law, the authors and contributors 
 
 ## License
 
-This project is licensed under the GNU GPL v3.0. See the [LICENSE](LICENSE) file.
+This project is licensed under MIT. See the [LICENSE](LICENSE) file.
